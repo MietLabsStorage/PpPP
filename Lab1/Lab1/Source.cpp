@@ -1,242 +1,214 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-using namespace std;
 
-void main()
+struct Size2D {
+	int x;
+	int y;
+};
+
+class Matrix {
+
+private:
+	Size2D size;
+
+	void setSize(Size2D size) {
+		if (size.x > 0 && size.y > 0) {
+			this->size = size;
+		}
+		else {
+			throw new std::exception("matrix size must be more zero");
+		}
+	}
+
+public:
+	int** values;
+
+	Size2D getSize() {
+		return size;
+	}
+
+	Matrix(Size2D size, bool setZeroes = false) {
+		setSize(size);
+
+		values = new int* [size.x];
+		for (int i = 0; i < size.x; i++)
+		{
+			values[i] = new int[size.y];
+			if (setZeroes) {
+				for (int j = 0; j < size.y; j++) {
+					values[i][j] = 0;
+				}
+			}
+		}
+	}
+
+	void show() {
+
+		for (int i = 0; i < size.x; i++)
+		{
+			for (int j = 0; j < size.x; j++)
+			{
+				std::cout << values[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+	}
+
+	void fillValues(bool isRandom = false) {
+		switch (isRandom)
+		{
+		case false:
+			for (int i = 0; i < size.x; i++)
+				for (int j = 0; j < size.y; j++)
+					std::cin >> values[i][j];
+			break;
+		case true:
+			for (int i = 0; i < size.x; i++)
+				for (int j = 0; j < size.y; j++)
+					values[i][j] = rand() % 10;
+			break;
+		}
+	}
+
+	//matrix.size more or equal this.size
+	void fillValues(Matrix* matrix, int i0 = 0, int j0 = 0) {
+		try {
+			for (int i = 0; i < size.x; i++)
+			{
+				for (int j = 0; j < size.y; j++)
+					this->values[i][j] = matrix->values[i + i0][j + j0];
+			}
+		}
+		catch(std::exception ex) {
+			std::cout << ex.what();
+		}
+	}
+};
+
+
+Size2D WriteMatrixSize() {
+	Size2D size;
+	do
+	{
+		std::cin >> size.x >> size.y;
+	} while (size.x <= 0 || size.y <= 0);
+	return size;
+}
+
+int ChoiseFillingMethod() {
+	int k;
+	do
+	{
+		std::cout << "Выберите способ заполнения матриц\n" <<
+			"1 - Вручную \n2 - Случайным образом\n";
+		std::cin >> k;
+	} while (k < 1 || k > 2);
+	return k;
+}
+
+int main()
 {
 	srand(time(NULL));
-	int n1, m1, n2, m2, k, l = 2;
 	system("chcp 1251");
-	cout << "Вас приветствует программа" << endl <<
+	std::cout << "Вас приветствует программа" << std::endl <<
 		"быстрого перемножения матриц методом Штрассена\n\n";
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	////////////////////Ввод размеров матрицы пользователем////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	do
-	{
-		cout << "Введите размеры первой матрицы\n";
-		cin >> n1 >> m1;
-	} while (n1 <= 0 || m1 <= 0);
-	do
-	{
-		cout << "Введите размеры второй матрицы\n";
-		cin >> n2 >> m2;
-	} while (n2 <= 0 || m2 <= 0);
+	std::cout << "Введите размеры первой матрицы\n";
+	Matrix* matrix1 = new Matrix(WriteMatrixSize());
+	std::cout << "Введите размеры второй матрицы\n";
+	Matrix* matrix2 = new Matrix(WriteMatrixSize());
 
-	int** M1 = new int* [n1];
-	for (int i = 0; i < n1; i++)
-		M1[i] = new int[m1];
-	int** M2 = new int* [n2];
-	for (int i = 0; i < n2; i++)
-		M2[i] = new int[m2];
 
 	///////////////////////////////////////////////////////////////////////////////
 	////////////////Выбор способа заполнения и заполнение матриц///////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	do
-	{
-		cout << "Выберите способ заполнения матриц\n" <<
-			"1 - Вручную \n2 - Случайным образом\n";
-		cin >> k;
-	} while (k < 1 || k > 2);
-	switch (k)
+	switch (ChoiseFillingMethod())
 	{
 	case 1:
-		for (int i = 0; i < n1; i++)
-			for (int j = 0; j < m1; j++)
-				cin >> M1[i][j];
-		for (int i = 0; i < n2; i++)
-			for (int j = 0; j < m2; j++)
-				cin >> M2[i][j];
-		cout << "\nМатрица 1\n\n";
-		for (int i = 0; i < n1; i++)
-		{
-			for (int j = 0; j < m1; j++)
-				cout << M1[i][j] << " ";
-			cout << endl;
-		}
-		cout << "\nМатрица 2\n\n";
-		for (int i = 0; i < n2; i++)
-		{
-			for (int j = 0; j < m2; j++)
-				cout << M2[i][j] << " ";
-			cout << endl;
-		}
+		matrix1->fillValues();
+		matrix2->fillValues();
 		break;
 	case 2:
-		for (int i = 0; i < n1; i++)
-			for (int j = 0; j < m1; j++)
-				M1[i][j] = rand() % 10;
-		for (int i = 0; i < n2; i++)
-			for (int j = 0; j < m2; j++)
-				M2[i][j] = rand() % 10;
-		cout << "\nМатрица 1\n\n";
-		for (int i = 0; i < n1; i++)
-		{
-			for (int j = 0; j < m1; j++)
-				cout << M1[i][j] << " ";
-			cout << endl;
-		}
-		cout << "\nМатрица 2\n\n";
-		for (int i = 0; i < n2; i++)
-		{
-			for (int j = 0; j < m2; j++)
-				cout << M2[i][j] << " ";
-			cout << endl;
-		}
+		matrix1->fillValues(true);
+		matrix2->fillValues(true);
 		break;
 	}
+
+	std::cout << "\nМатрица 1\n\n";
+	matrix1->show();
+	std::cout << "\nМатрица 2\n\n";
+	matrix2->show();
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	/////////////////Приведение матриц к требуемому размеру////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	while (l < n1 || l < n2 || l < m1 || l < m2)
-		l *= 2;
-	int** M3 = new int* [l];
-	for (int i = 0; i < l; i++)
+	int l = 2;
+	while (l < matrix1->getSize().x || l < matrix1->getSize().y || l < matrix2->getSize().x || l < matrix2->getSize().y) l *= 2;
+
+	Matrix* restoredMatrix1 = new Matrix(Size2D{ l,l }, true);
+	Matrix* restoredMatrix2 = new Matrix(Size2D{ l,l }, true);
+
+	for (int i = 0; i < matrix1->getSize().x; i++)
 	{
-		M3[i] = new int[l];
-		for (int j = 0; j < l; j++)
-			M3[i][j] = 0;
+		for (int j = 0; j < matrix1->getSize().y; j++)
+			restoredMatrix1->values[i][j] = matrix1->values[i][j];
 	}
-	int** M4 = new int* [l];
-	for (int i = 0; i < l; i++)
+	for (int i = 0; i < matrix2->getSize().x; i++)
 	{
-		M4[i] = new int[l];
-		for (int j = 0; j < l; j++)
-			M4[i][j] = 0;
+		for (int j = 0; j < matrix2->getSize().y; j++)
+			restoredMatrix2->values[i][j] = matrix2->values[i][j];
 	}
-	for (int i = 0; i < n1; i++)
-	{
-		for (int j = 0; j < m1; j++)
-			M3[i][j] = M1[i][j];
-	}
-	for (int i = 0; i < n2; i++)
-	{
-		for (int j = 0; j < m2; j++)
-			M4[i][j] = M2[i][j];
-	}
-	cout << "Приведенные матрицы\n";
-	cout << "\nМатрица 1\n\n";
-	for (int i = 0; i < l; i++)
-	{
-		for (int j = 0; j < l; j++)
-			cout << M3[i][j] << " ";
-		cout << endl;
-	}
-	cout << "\nМатрица 2\n\n";
-	for (int i = 0; i < l; i++)
-	{
-		for (int j = 0; j < l; j++)
-			cout << M4[i][j] << " ";
-		cout << endl;
-	}
+
+	std::cout << "Приведенные матрицы\n";
+	std::cout << "\nМатрица 1\n\n";
+	restoredMatrix1->show();
+	std::cout << "\nМатрица 2\n\n";
+	restoredMatrix2->show();
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////Разбиение матриц на подматрицы и их заполнение//////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	int** mat1 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat1[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat1[i][j] = M3[i][j];
+	const int submatrixLen = 4;
+	Matrix* submatrixes1[submatrixLen];
+	for (int i = 0; i < submatrixLen; i++) {
+		submatrixes1[i] = new Matrix(Size2D{ l / 2, l / 2 });
 	}
-	int** mat2 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat2[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat2[i][j] = M3[i][j + l / 2];
+	submatrixes1[0]->fillValues(restoredMatrix1, 0, 0);
+	submatrixes1[1]->fillValues(restoredMatrix1, 0, l / 2);
+	submatrixes1[2]->fillValues(restoredMatrix1, l / 2, 0);
+	submatrixes1[3]->fillValues(restoredMatrix1, l / 2, l / 2);
+
+	Matrix* submatrixes2[submatrixLen];
+	for (int i = 0; i < submatrixLen; i++) {
+		submatrixes2[i] = new Matrix(Size2D{ l / 2, l / 2 });
 	}
-	int** mat3 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat3[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat3[i][j] = M3[i + l / 2][j];
-	}
-	int** mat4 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat4[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat4[i][j] = M3[i + l / 2][j + l / 2];
-	}
-	int** mat5 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat5[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat5[i][j] = M4[i][j];
-	}
-	int** mat6 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat6[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat6[i][j] = M4[i][j + l / 2];
-	}
-	int** mat7 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat7[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat7[i][j] = M4[i + l / 2][j];
-	}
-	int** mat8 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat8[i] = new int[l / 2];
-		for (int j = 0; j < l / 2; j++)
-			mat8[i][j] = M4[i + l / 2][j + l / 2];
-	}
+	submatrixes2[0]->fillValues(restoredMatrix2, 0, 0);
+	submatrixes2[1]->fillValues(restoredMatrix2, 0, l / 2);
+	submatrixes2[2]->fillValues(restoredMatrix2, l / 2, 0);
+	submatrixes2[3]->fillValues(restoredMatrix2, l / 2, l / 2);
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	////////////////////////Создание промежуточных матриц//////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	int** p1 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p1[i] = new int[l / 2];
-	}
-	int** p2 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p2[i] = new int[l / 2];
-	}
-	int** p3 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p3[i] = new int[l / 2];
-	}
-	int** p4 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p4[i] = new int[l / 2];
-	}
-	int** p5 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p5[i] = new int[l / 2];
-	}
-	int** p6 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p6[i] = new int[l / 2];
-	}
-	int** p7 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		p7[i] = new int[l / 2];
-	}
+	const int intermedmatrixLen = 7;
+	Matrix* intermediateMatrixes[intermedmatrixLen];
+	for (int i = 0; i < intermedmatrixLen; i++) {
+		intermediateMatrixes[i] = new Matrix(Size2D{ l / 2, l / 2 }, true);
+	};
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	////////////////////Вычисление значений промежуточных матриц///////////////////
@@ -246,74 +218,31 @@ void main()
 	{
 		for (int j = 0; j < l / 2; j++)
 		{
-			p1[i][j] = 0;
 			for (int z = 0; z < l / 2; z++)
 			{
-				p1[i][j] += (mat1[i][z] + mat4[i][z]) * (mat5[z][j] + mat8[z][j]);
+				intermediateMatrixes[0]->values[i][j] += (submatrixes1[0]->values[i][z] + submatrixes1[3]->values[i][z]) * (submatrixes2[0]->values[z][j] + submatrixes2[3]->values[z][j]);
+				intermediateMatrixes[1]->values[i][j] += (submatrixes1[2]->values[i][z] + submatrixes1[3]->values[i][z]) * submatrixes2[0]->values[z][j];
+				intermediateMatrixes[2]->values[i][j] += submatrixes1[0]->values[i][z] * (submatrixes2[1]->values[z][j] - submatrixes2[3]->values[z][j]);
+				intermediateMatrixes[3]->values[i][j] += submatrixes1[3]->values[i][z] * (submatrixes2[2]->values[z][j] - submatrixes2[0]->values[z][j]);
+				intermediateMatrixes[4]->values[i][j] += (submatrixes1[0]->values[i][z] + submatrixes1[1]->values[i][z]) * submatrixes2[3]->values[z][j];
+				intermediateMatrixes[5]->values[i][j] += (submatrixes1[2]->values[i][z] - submatrixes1[0]->values[i][z]) * (submatrixes2[0]->values[z][j] + submatrixes2[1]->values[z][j]);
+				intermediateMatrixes[6]->values[i][j] += (submatrixes1[1]->values[i][z] - submatrixes1[3]->values[i][z]) * (submatrixes2[2]->values[z][j] + submatrixes2[3]->values[z][j]);
 			}
 
-			p2[i][j] = 0;
-			for (int z = 0; z < l / 2; z++)
-			{
-				p2[i][j] += (mat3[i][z] + mat4[i][z]) * mat5[z][j];
-			}
-
-			p3[i][j] = 0;
-			for (int z = 0; z < l / 2; z++)
-			{
-				p3[i][j] += mat1[i][z] * (mat6[z][j] - mat8[z][j]);
-			}
-
-			p4[i][j] = 0;
-			for (int z = 0; z < l / 2; z++)
-			{
-				p4[i][j] += mat4[i][z] * (mat7[z][j] - mat5[z][j]);
-			}
-
-			p5[i][j] = 0;
-			for (int z = 0; z < l / 2; z++)
-			{
-				p5[i][j] += (mat1[i][z] + mat2[i][z]) * mat8[z][j];
-			}
-
-			p6[i][j] = 0;
-			for (int z = 0; z < l / 2; z++)
-			{
-				p6[i][j] += (mat3[i][z] - mat1[i][z]) * (mat5[z][j] + mat6[z][j]);
-			}
-
-			p7[i][j] = 0;
-			for (int z = 0; z < l / 2; z++)
-			{
-				p7[i][j] += (mat2[i][z] - mat4[i][z]) * (mat7[z][j] + mat8[z][j]);
-			}
 		}
 	}
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////////Создание вспомогательных матриц/////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	int** mat9 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat9[i] = new int[l / 2];
+	const int assistmatrixLen = 4;
+	Matrix* assistiveMatrixes[assistmatrixLen];
+	for (int i = 0; i < assistmatrixLen; i++) {
+		assistiveMatrixes[i] = new Matrix(Size2D{ l / 2,l / 2 });
 	}
-	int** mat10 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat10[i] = new int[l / 2];
-	}
-	int** mat11 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat11[i] = new int[l / 2];
-	}
-	int** mat12 = new int* [l / 2];
-	for (int i = 0; i < l / 2; i++)
-	{
-		mat12[i] = new int[l / 2];
-	}
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	////////////Подсчет значений вспомогательных матриц из промежуточных///////////
@@ -323,22 +252,20 @@ void main()
 	{
 		for (int j = 0; j < l / 2; j++)
 		{
-			mat9[i][j] = p1[i][j] + p4[i][j] - p5[i][j] + p7[i][j];
-			mat10[i][j] = p3[i][j] + p5[i][j];
-			mat11[i][j] = p2[i][j] + p4[i][j];
-			mat12[i][j] = p1[i][j] - p2[i][j] + p3[i][j] + p6[i][j];
+			assistiveMatrixes[0]->values[i][j] = intermediateMatrixes[0]->values[i][j] + intermediateMatrixes[3]->values[i][j] - intermediateMatrixes[4]->values[i][j] + intermediateMatrixes[6]->values[i][j];
+			assistiveMatrixes[1]->values[i][j] = intermediateMatrixes[2]->values[i][j] + intermediateMatrixes[4]->values[i][j];
+			assistiveMatrixes[2]->values[i][j] = intermediateMatrixes[1]->values[i][j] + intermediateMatrixes[3]->values[i][j];
+			assistiveMatrixes[3]->values[i][j] = intermediateMatrixes[0]->values[i][j] - intermediateMatrixes[1]->values[i][j] + intermediateMatrixes[2]->values[i][j] + intermediateMatrixes[5]->values[i][j];
 		}
 	}
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////Создание результирующей матрицы/////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	int** M5 = new int* [l];
-	for (int i = 0; i < l; i++)
-	{
-		M5[i] = new int[l];
-	}
+	Matrix* resultMatrix = new Matrix(Size2D{ l, l });
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	///////Занесение информации из вспомогательных матриц в результирующую/////////
@@ -348,70 +275,56 @@ void main()
 	{
 		for (int j = 0; j < l / 2; j++)
 		{
-			M5[i][j] = mat9[i][j];
-			M5[i][j + l / 2] = mat10[i][j];
-			M5[i + l / 2][j] = mat11[i][j];
-			M5[i + l / 2][j + l / 2] = mat12[i][j];
+			resultMatrix->values[i][j] = assistiveMatrixes[0]->values[i][j];
+			resultMatrix->values[i][j + l / 2] = assistiveMatrixes[1]->values[i][j];
+			resultMatrix->values[i + l / 2][j] = assistiveMatrixes[2]->values[i][j];
+			resultMatrix->values[i + l / 2][j + l / 2] = assistiveMatrixes[3]->values[i][j];
 		}
 	}
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	////////////////Выравнивание границ результирующей матрицы/////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	int x = 0, f = 100, s = 100;
+	int x = 0, y = 0, f = 100, s = 100;
 	for (int i = 0; i < l; i++)
 	{
 		x = 0;
+		y = 0;
 		for (int j = 0; j < l; j++)
 		{
-			if (M5[i][j] != 0)
+			if (resultMatrix->values[i][j] != 0)
 			{
 				x++;
 				f = 100;
+			}
+			if (resultMatrix->values[j][i] != 0)
+			{
+				y++;
+				s = 100;
 			}
 		}
 		if (x == 0 && i < f)
 		{
 			f = i;
 		}
-	}
-	for (int i = 0; i < l; i++)
-	{
-		x = 0;
-		for (int j = 0; j < l; j++)
-		{
-			if (M5[j][i] != 0)
-			{
-				x++;
-				s = 100;
-			}
-		}
-		if (x == 0 && i < s)
+		if (y == 0 && i < s)
 		{
 			s = i;
 		}
 	}
 
-	int** M6 = new int* [f];
-	for (int i = 0; i < f; i++)
-	{
-		M6[i] = new int[s];
-		for (int j = 0; j < s; j++)
-			M6[i][j] = M5[i][j];
-	}
+	Matrix* finalMatrix = new Matrix(Size2D{ f, s });
+	finalMatrix->fillValues(resultMatrix);
+
 
 	///////////////////////////////////////////////////////////////////////////////
 	///////////////////Вывод результирующей матрицы////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	cout << "\nРезультирующая матрица\n\n";
-	for (int i = 0; i < f; i++)
-	{
-		for (int j = 0; j < s; j++)
-			cout << M6[i][j] << " ";
-		cout << endl;
-	}
+	std::cout << "\nРезультирующая матрица\n\n";
+	finalMatrix->show();
 
 	system("pause");
 
@@ -419,41 +332,42 @@ void main()
 	/////////////////////Очистка динамической памяти///////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////
 
-	for (int i = 0; i < n1; i++)
-		delete[] M1[i];
-	for (int i = 0; i < n2; i++)
-		delete[] M2[i];
+	for (int i = 0; i < matrix1->getSize().x; i++)
+		delete[] matrix1->values[i];
+	for (int i = 0; i < matrix2->getSize().x; i++)
+		delete[] matrix2->values[i];
 	for (int i = 0; i < l; i++)
 	{
-		delete[] M3[i];
-		delete[] M4[i];
-		delete[] M5[i];
+		delete[] restoredMatrix1->values[i];
+		delete[] restoredMatrix2->values[i];
+		delete[] resultMatrix->values[i];
 	}
 	for (int i = 0; i < f; i++)
-		delete[] M6[i];
+		delete[] finalMatrix->values[i];
 	for (int i = 0; i < l / 2; i++)
 	{
-		delete[] mat1[i];
-		delete[] mat2[i];
-		delete[] mat3[i];
-		delete[] mat4[i];
-		delete[] mat5[i];
-		delete[] mat6[i];
-		delete[] mat7[i];
-		delete[] mat8[i];
-		delete[] mat9[i];
-		delete[] mat10[i];
-		delete[] mat11[i];
-		delete[] mat12[i];
-		delete[] p1[i];
-		delete[] p2[i];
-		delete[] p3[i];
-		delete[] p4[i];
-		delete[] p5[i];
-		delete[] p6[i];
-		delete[] p7[i];
+		for (int j = 0; j < intermedmatrixLen; j++) {
+			delete[] intermediateMatrixes[j]->values[i];
+		}
+		for (int j = 0; j < submatrixLen; j++) {
+			delete[] submatrixes1[j]->values[i];
+			delete[] submatrixes2[j]->values[i];
+		}
+		for (int j = 0; j < assistmatrixLen; j++) {
+			delete[] assistiveMatrixes[j]->values[i];
+		}
 	}
-	delete[] M1, M2, M3, M4, M5, M6;
-	delete[] mat1, mat2, mat3, mat4, mat5, mat6, mat7, mat8, mat9, mat10, mat11, mat12;
-	delete[] p1, p2, p3, p4, p5, p6, p7;
+	delete[] matrix1->values, matrix2->values, restoredMatrix1->values, restoredMatrix2->values, resultMatrix->values, finalMatrix->values;
+	for (int j = 0; j < intermedmatrixLen; j++) {
+		delete[] intermediateMatrixes[j]->values;
+	}
+	for (int j = 0; j < submatrixLen; j++) {
+		delete[] submatrixes1[j]->values;
+		delete[] submatrixes2[j]->values;
+	}
+	for (int j = 0; j < assistmatrixLen; j++) {
+		delete[] assistiveMatrixes[j]->values;
+	}
+
+	return 0;
 }
