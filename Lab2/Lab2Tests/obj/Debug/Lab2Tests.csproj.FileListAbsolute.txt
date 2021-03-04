@@ -1,0 +1,11 @@
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\bin\Debug\Lab2Tests.dll
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\bin\Debug\Lab2Tests.pdb
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\bin\Debug\Lab2.exe
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\bin\Debug\nunit.framework.dll
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\bin\Debug\Lab2.pdb
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\bin\Debug\nunit.framework.xml
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\obj\Debug\Lab2Tests.csprojAssemblyReference.cache
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\obj\Debug\Lab2Tests.csproj.CoreCompileInputs.cache
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\obj\Debug\Lab2Tests.csproj.CopyComplete
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\obj\Debug\Lab2Tests.dll
+C:\Users\maksi\Desktop\6 семестр\PpPP\lab2\Lab2Tests\obj\Debug\Lab2Tests.pdb
