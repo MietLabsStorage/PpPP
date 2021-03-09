@@ -16,7 +16,7 @@ namespace lab2tests
         public void Test5_01()
         {
             string ans = Program.Solve(0, 0, 0, 0, 0, 0);
-            Assert.True(String.Equals("5", ans));
+            Assert.AreEqual("5", ans);
         }
 
 
@@ -29,32 +29,50 @@ namespace lab2tests
         /// det, det1, det2 != 0
         /// </summary>
         [Test]
-        public void Test2_01()
+        public void Test2_01_i()
         {
             string ans = Program.Solve(1, 2, 3, 1, 3, 4);
-            Assert.True(String.Equals($"2 {1} {1}", ans));
+            Assert.AreEqual($"2 {1} {1}", ans);
+        }
+        [Test]
+        public void Test2_01_d()
+        {
+            string ans = Program.Solve(1.1, 2.2, 3.3, 1.1, 3, 4);
+            Assert.AreEqual($"2 {10/11.0} {10/11.0}", ans);
         }
         
         /// <summary>
         /// det, det1 != 0, det2 = 0
         /// </summary>
         [Test]
-        public void Test2_02()
+        public void Test2_02_i()
         {
             string ans = Program.Solve(1, 2, 2, 1, -1, -2);
-            Assert.True(String.Equals($"2 {-1} {0}", ans));
+            Assert.AreEqual($"2 {-1} {0}", ans);
+        }
+        [Test]
+        public void Test2_02_d()
+        {
+            string ans = Program.Solve(1.1, 2, 2.2, 1, -1, -2);
+            Assert.AreEqual($"2 {-10/11.0} {0}", ans);
         }
         
         /// <summary>
         /// det, det2 != 0, det1 = 0
         /// </summary>
         [Test]
-        public void Test2_03()
+        public void Test2_03_i()
         {
             string ans = Program.Solve(1, 2, 2, 1, -2, -1);
-            Assert.True(String.Equals($"2 {0} {-1}", ans));
+            Assert.AreEqual($"2 {0} {-1}", ans);
         }
-
+        [Test]
+        public void Test2_03_d()
+        {
+            string ans = Program.Solve(1, 2.2, 2, 1.1, -2, -1);
+            Assert.AreEqual($"2 {0} {-10/11.0}", ans);
+        }
+        
         /// <summary>
         /// det != 0, det1, det2 = 0
         /// </summary>
@@ -62,18 +80,9 @@ namespace lab2tests
         public void Test2_04()
         {
             string ans = Program.Solve(1, 0, 0, 1, 0, 0);
-            Assert.True(String.Equals($"2 {0} {0}", ans));
+            Assert.AreEqual($"2 {0} {0}", ans);
         }
         
-        /// <summary>
-        /// uninteger ans
-        /// </summary>
-        [Test]
-        public void Test2_05()
-        {
-            string ans = Program.Solve(1, 2, 2, 1, 3, 4);
-            Assert.True(String.Equals($"2 {5/3} {2/3}", ans));
-        }
         
         
         //***************************************************************************
@@ -84,31 +93,50 @@ namespace lab2tests
         /// <summary>
         ///  ax = e
         /// </summary>
+        /// [Test]
         [Test]
-        public void Test3_01()
+        public void Test3_01_i()
         {
-            string ans = Program.Solve(0.5, 0, 0,0, 1/3, 0);
-            Assert.True(String.Equals($"3 {2/3}", ans));
+            string ans = Program.Solve(0.5, 0, 0,0, 1, 0);
+            Assert.AreEqual($"3 {2}", ans);
+        }
+        [Test]
+        public void Test3_01_d()
+        {
+            string ans = Program.Solve(0.5, 0, 0,0, 1/3.0, 0);
+            Assert.AreEqual($"3 {2/3.0}", ans);
         }
         
         /// <summary>
         ///  cx = f
         /// </summary>
         [Test]
-        public void Test3_02()
+        public void Test3_02_i()
         {
-            string ans = Program.Solve(0, 0, 0.5,0, 0, 1/3);
-            Assert.True(String.Equals($"3 {2/3}", ans));
+            string ans = Program.Solve(0, 0, 0.5,0, 0, 1);
+            Assert.AreEqual($"3 {2}", ans);
+        }
+        [Test]
+        public void Test3_02_d()
+        {
+            string ans = Program.Solve(0, 0, 0.5,0, 0, 1/3.0);
+            Assert.AreEqual($"3 {2/3.0}", ans);
         }
         
         /// <summary>
         ///  ax = e and cx = f
         /// </summary>
         [Test]
-        public void Test3_03()
+        public void Test3_03_i()
         {
-            string ans = Program.Solve(0.5, 0, 0.5,0, 1/3, 1/3);
-            Assert.True(String.Equals($"3 {2/3}", ans));
+            string ans = Program.Solve(0.5, 0, 0.5,0, 1, 1);
+            Assert.AreEqual($"3 {2}", ans);
+        }
+        [Test]
+        public void Test3_03_d()
+        {
+            string ans = Program.Solve(0.5, 0, 0.5,0, 1/3.0, 1/3.0);
+            Assert.AreEqual($"3 {2/3.0}", ans);
         }
         
         
@@ -121,32 +149,49 @@ namespace lab2tests
         ///  ax = e
         /// </summary>
         [Test]
-        public void Test4_01()
+        public void Test4_01_i()
         {
-            string ans = Program.Solve(0, 0.5, 0,0, 1/3, 0);
-            Assert.True(String.Equals($"4 {2/3}", ans));
+            string ans = Program.Solve(0, 0.5, 0,0, 1, 0);
+            Assert.AreEqual($"4 {2}", ans);
+        }
+        [Test]
+        public void Test4_01_d()
+        {
+            string ans = Program.Solve(0, 0.5, 0,0, 1/3.0, 0);
+            Assert.AreEqual($"4 {2/3.0}", ans);
         }
         
         /// <summary>
         ///  cx = f
         /// </summary>
         [Test]
-        public void Test4_02()
+        public void Test4_02_i()
         {
-            string ans = Program.Solve(0, 0, 0,0.5, 0, 1/3);
-            Assert.True(String.Equals($"4 {2/3}", ans));
+            string ans = Program.Solve(0, 0, 0,0.5, 0, 1);
+            Assert.AreEqual($"4 {2}", ans);
+        }
+        [Test]
+        public void Test4_02_d()
+        {
+            string ans = Program.Solve(0, 0, 0,0.5, 0, 1/3.0);
+            Assert.AreEqual($"4 {2/3.0}", ans);
         }
         
         /// <summary>
         ///  ax = e and cx = f
         /// </summary>
         [Test]
-        public void Test4_03()
+        public void Test4_03_i()
         {
-            string ans = Program.Solve(0, 0.5, 0, 0.5, 1/3, 1/3);
-            Assert.True(String.Equals($"4 {2/3}", ans));
+            string ans = Program.Solve(0, 0.5, 0, 0.5, 1, 1);
+            Assert.AreEqual($"4 {2}", ans);
         }
-
+        [Test]
+        public void Test4_03_d()
+        {
+            string ans = Program.Solve(0, 0.5, 0, 0.5, 1/3.0, 1/3.0);
+            Assert.AreEqual($"4 {2/3.0}", ans);
+        }
         
         //***************************************************************************
         //* y = kx + n
@@ -157,43 +202,51 @@ namespace lab2tests
         ///  0x+0y=0 and cx+fy=f
         /// </summary>
         [Test]
-        public void Test1_01()
+        public void Test1_01_i()
         {
             string ans = Program.Solve(0, 0, 1, 1, 0, 1);
-            Assert.True(String.Equals($"1 {-1} {1}", ans));
+            Assert.AreEqual($"1 {-1} {1}", ans);
+        }
+        [Test]
+        public void Test1_01_d()
+        {
+            string ans = Program.Solve(0, 0, 2/3.0, 1, 0, 2/3.0);
+            Assert.AreEqual($"1 {-2/3.0} {2/3.0}", ans);
         }
         
         /// <summary>
         ///  ax+by=e and 0x+0y=0
         /// </summary>
         [Test]
-        public void Test1_02()
+        public void Test1_02_i()
         {
             string ans = Program.Solve(1, 1, 0, 0, 1, 0);
-            Assert.True(String.Equals($"1 {-1} {1}", ans));
+            Assert.AreEqual($"1 {-1} {1}", ans);
+        }
+        [Test]
+        public void Test1_02_d()
+        {
+            string ans = Program.Solve(2/3.0, 1, 0, 0, 2/3.0, 0);
+            Assert.AreEqual($"1 {-2/3.0} {2/3.0}", ans);
         }
         
         /// <summary>
         ///  ax+by=e and kax+kby=ke
         /// </summary>
         [Test]
-        public void Test1_03()
+        public void Test1_03_i()
         {
             string ans = Program.Solve(1, 1, 3, 3, 1, 3);
-            Assert.True(String.Equals($"1 {-1} {4/3}", ans));
+            Assert.AreEqual($"1 {-1} {1}", ans);
         }
-        
-        /// <summary>
-        /// ax+by=e and kax+kby=ke
-        /// but double ans
-        /// </summary>
         [Test]
-        public void Test1_04()
+        public void Test1_03_d()
         {
-            string ans = Program.Solve(1.5, 1.5, 3, 3, 2, 4);
-            Assert.True(String.Equals($"1 {-1} {4/3}", ans));
+            string ans = Program.Solve(2/3.0, 1, 2, 3, 2/3.0, 2);
+            Assert.AreEqual($"1 {-2/3.0} {2/3.0}", ans);
         }
         
+       
         
         //***************************************************************************
         //* нет решений
@@ -207,7 +260,7 @@ namespace lab2tests
         public void Test0_01()
         {
             string ans = Program.Solve(3, 3, 3, 3, 2, 4);
-            Assert.True(String.Equals($"0", ans));
+            Assert.AreEqual($"0", ans);
         }
         
         /// <summary>
@@ -217,7 +270,7 @@ namespace lab2tests
         public void Test0_02()
         {
             string ans = Program.Solve(0, 0, 0, 0, 2, 4);
-            Assert.True(String.Equals($"0", ans));
+            Assert.AreEqual($"0", ans);
         }
         
         /// <summary>
@@ -227,7 +280,7 @@ namespace lab2tests
         public void Test0_03()
         {
             string ans = Program.Solve(1, 2, 1, 2, 2, 4);
-            Assert.True(String.Equals($"0", ans));
+            Assert.AreEqual($"0", ans);
         }
 
     }
