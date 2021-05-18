@@ -11,6 +11,8 @@ namespace Lab3
         private string _finishPoint;
         private Lab3.Type _type;
         private readonly Track _track;
+        private TransportsDirector _director;
+        private TransportsListBuilder _builder;
 
         public Order()
         {
@@ -60,189 +62,75 @@ namespace Lab3
                 }
             }
 
+            _builder = new TransportsListBuilder(path);
+            _director = new TransportsDirector(_builder);
             switch (count)
             {
                 case 1:
                 {
-                    Car car1 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[0]]))
-                        {
-                            car1 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[0]][path[1]]);
-                        }
-                    }
-
-                    Track track = new Track(new List<Transport>(){car1}, volume);
+                    _director.Make1Car(true);
+                    Track track = new Track(_builder.Result, volume);
                     return track;
                 }
                 case 3:
                 {
-                    Car car1 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[0]]))
-                        {
-                            car1 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[0]][path[1]]);
-                        }
-                    }
-
-                    Car car2 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[2]]))
-                        {
-                            car2 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[2]][path[3]]);
-                        }
-                    }
-
-                    Train train1 = new Train();
-                    Plane plane1 = new Plane();
+                    _director.Make2Car(true);
                     Track track = new Track();
-
-                    foreach(var it in States.Table.Value)
+                    foreach (var it in States.Table.Value)
                     {
-                        if (it.Key.Contains(States.Points.Value[path[1]]) && States.Points.Value[path[1]].Contains("TS"))
+                        if (it.Key.Contains(States.Points.Value[path[1]]) &&
+                            States.Points.Value[path[1]].Contains("TS"))
                         {
-                            train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], States.MatrixDist.Value[path[1]][path[2]]);
-                            track = new Track(new List<Transport> {car1, car2, train1}, volume);
+                            _director.Make1Train(1,2);
+                            track = new Track(_builder.Result, volume);
                         }
-
-                        if (it.Key.Contains(States.Points.Value[path[1]]) && States.Points.Value[path[1]].Contains("AP"))
+                        if (it.Key.Contains(States.Points.Value[path[1]]) &&
+                            States.Points.Value[path[1]].Contains("AP"))
                         {
-                            plane1 = new Plane(States.TableCosts.Value[it.Value * 3], States.MatrixDist.Value[path[1]][path[2]]);
-                            track = new Track(new List<Transport> {car1, car2, plane1}, volume);
+                            _director.Make1Plane(1,2);
+                            track = new Track(_builder.Result, volume);
                         }
                     }
-
                     return track;
                 }
                 case 5:
                 {
-                    Car car1 = new Car();
-                    foreach(var it in States.Table.Value)
+                    _director.Make3Car(true);
+                    foreach (var it in States.Table.Value)
                     {
-                        if (it.Key.Contains(States.Points.Value[path[0]]))
+                        if (States.Points.Value[path[1]].Contains("TS"))
                         {
-                            car1 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[0]][path[1]]);
+                            if (it.Key.Contains(States.Points.Value[path[3]]))
+                            {
+                                _director.Make1Train(3,4);
+                            }
+                            else if (it.Key.Contains(States.Points.Value[path[1]]))
+                            {
+                                _director.Make1Train(1,2);
+
+                            }
+                        }
+                        if (States.Points.Value[path[3]].Contains("AP"))
+                        {
+                            if (it.Key.Contains(States.Points.Value[path[3]]))
+                            {
+                                _director.Make1Plane(1,2);
+                            }
+                            else if (it.Key.Contains(States.Points.Value[path[3]]))
+                            {
+                                _director.Make1Plane(3,4);
+                            }
                         }
                     }
-
-                    Train train1 = new Train();
-                    Plane plane1 = new Plane();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[1]]) && States.Points.Value[path[1]].Contains("TS"))
-                        {
-                            train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], States.MatrixDist.Value[path[1]][path[2]]);
-                        }
-
-                        if (it.Key.Contains(States.Points.Value[path[1]]) && States.Points.Value[path[1]].Contains("AP"))
-                        {
-                            plane1 = new Plane(States.TableCosts.Value[it.Value * 3], States.MatrixDist.Value[path[1]][path[2]]);
-                        }
-                    }
-
-                    Car car2 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[2]]))
-                        {
-                            car2 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[2]][path[3]]);
-                        }
-                    }
-
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[3]]) && States.Points.Value[path[3]].Contains("AP"))
-                        {
-                            plane1 = new Plane(States.TableCosts.Value[it.Value * 3], States.MatrixDist.Value[path[3]][path[4]]);
-                        }
-
-                        if (it.Key.Contains(States.Points.Value[path[3]]) && States.Points.Value[path[3]].Contains("TS"))
-                        {
-                            train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], States.MatrixDist.Value[path[3]][path[4]]);
-                        }
-                    }
-
-                    Car car3 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[4]]))
-                        {
-                            car3 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[4]][path[5]]);
-                        }
-                    }
-
-                    Track track = new Track(new List<Transport> {car1, car2, car3, train1, plane1}, volume);
+                    Track track = new Track(_builder.Result, volume);
                     return track;
                 }
                 case 7:
                 {
-                    Car car1 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[0]]))
-                        {
-                            car1 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[0]][path[1]]);
-                        }
-                    }
-
-                    Train train1 = new Train();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[1]]))
-                        {
-                            train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], States.MatrixDist.Value[path[1]][path[2]]);
-                        }
-                    }
-
-                    Car car2 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[2]]))
-                        {
-                            car2 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[2]][path[3]]);
-                        }
-                    }
-
-                    Plane plane1 = new Plane();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[3]]))
-                        {
-                            plane1 = new Plane(States.TableCosts.Value[it.Value * 3], States.MatrixDist.Value[path[3]][path[4]]);
-                        }
-                    }
-
-                    Car car3 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[4]]))
-                        {
-                            car3 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[4]][path[5]]);
-                        }
-                    }
-
-                    Train train2 = new Train();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[5]]))
-                        {
-                            train2 = new Train(States.TableCosts.Value[it.Value * 3 + 1], States.MatrixDist.Value[path[5]][path[6]]);
-                        }
-                    }
-
-                    Car car4 = new Car();
-                    foreach(var it in States.Table.Value)
-                    {
-                        if (it.Key.Contains(States.Points.Value[path[6]]))
-                        {
-                            car4 = new Car(States.TableCosts.Value[it.Value * 3 + 2], States.MatrixDist.Value[path[6]][path[7]]);
-                        }
-                    }
-
-                    Track track = new Track(new List<Transport> {car1, car2, car3, car4, train1, train2, plane1}, volume);
+                    _director.Make4Car(true);
+                    _director.Make1Plane(1,2);
+                    _director.Make2Train();
+                    Track track = new Track(_builder.Result, volume);
 
                     return track;
                 }
@@ -250,7 +138,7 @@ namespace Lab3
 
             return null;
         }
-        
+
         public int[][] matrixUpd(Type type)
         {
             int[][] matrix = new int[States.Points.Value.Count][];
@@ -262,6 +150,7 @@ namespace Lab3
                     matrix[i][j] = States.MatrixDist.Value[i][j];
                 }
             }
+
             switch (type)
             {
                 case Type.Economy:
@@ -271,8 +160,9 @@ namespace Lab3
                             for (int j = 0; j < States.Points.Value.Count; j++)
                                 matrix[i][j] = 99999;
                     }
+
                     break;
-                    
+
                 case Type.Standart:
                     for (int i = 0; i < States.Points.Value.Count; i++)
                     {
@@ -280,8 +170,9 @@ namespace Lab3
                             for (int j = 0; j < States.Points.Value.Count; j++)
                                 matrix[i][j] = 99999;
                     }
+
                     break;
-                    
+
                 case Type.Turbo:
                     for (int i = 0; i < States.Points.Value.Count; i++)
                     {
@@ -289,9 +180,10 @@ namespace Lab3
                             if (matrix[i][j] == 0)
                                 matrix[i][j] = 99999;
                     }
+
                     break;
-                
             }
+
             return matrix;
         }
 
@@ -307,9 +199,11 @@ namespace Lab3
                 d[i] = 99999;
                 v[i] = 1;
             }
+
             d[beginIndex] = 0;
 
-            do {
+            do
+            {
                 minindex = 99999;
                 min = 99999;
                 for (int i = 0; i < States.Points.Value.Count; i++)
@@ -334,6 +228,7 @@ namespace Lab3
                             }
                         }
                     }
+
                     v[minindex] = 0;
                 }
             } while (minindex < 99999);
@@ -377,6 +272,7 @@ namespace Lab3
                 if (str.Equals(it.Key))
                     return it.Value;
             }
+
             return -1;
         }
     }

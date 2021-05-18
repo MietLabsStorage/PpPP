@@ -56,7 +56,10 @@
     <Compile Include="TableCost.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="Transports\Train.cs" />
+    <Compile Include="Transports\ITransportsBuilder.cs" />
     <Compile Include="Transports\Transport.cs" />
+    <Compile Include="Transports\TransportsDirector.cs" />
+    <Compile Include="Transports\TransportsListBuilder.cs" />
     <Compile Include="Type.cs" />
   </ItemGroup>
   <ItemGroup>
