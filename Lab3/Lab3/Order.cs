@@ -75,60 +75,26 @@ namespace Lab3
                 case 3:
                 {
                     _director.Make2Car(true);
-                    Track track = new Track();
-                    foreach (var it in States.Table.Value)
+                    _director.Make1Train();
+                    if(_builder.Result.Count != 3)
                     {
-                        if (it.Key.Contains(States.Points.Value[path[1]]) &&
-                            States.Points.Value[path[1]].Contains("TS"))
-                        {
-                            _director.Make1Train(1,2);
-                            track = new Track(_builder.Result, volume);
-                        }
-                        if (it.Key.Contains(States.Points.Value[path[1]]) &&
-                            States.Points.Value[path[1]].Contains("AP"))
-                        {
-                            _director.Make1Plane(1,2);
-                            track = new Track(_builder.Result, volume);
-                        }
+                        _director.Make1Plane();
                     }
+                    Track track = new Track();
                     return track;
                 }
                 case 5:
                 {
                     _director.Make3Car(true);
-                    foreach (var it in States.Table.Value)
-                    {
-                        if (States.Points.Value[path[1]].Contains("TS"))
-                        {
-                            if (it.Key.Contains(States.Points.Value[path[3]]))
-                            {
-                                _director.Make1Train(3,4);
-                            }
-                            else if (it.Key.Contains(States.Points.Value[path[1]]))
-                            {
-                                _director.Make1Train(1,2);
-
-                            }
-                        }
-                        if (States.Points.Value[path[3]].Contains("AP"))
-                        {
-                            if (it.Key.Contains(States.Points.Value[path[3]]))
-                            {
-                                _director.Make1Plane(1,2);
-                            }
-                            else if (it.Key.Contains(States.Points.Value[path[3]]))
-                            {
-                                _director.Make1Plane(3,4);
-                            }
-                        }
-                    }
+                    _director.Make1Plane();
+                    _director.Make1Train();
                     Track track = new Track(_builder.Result, volume);
                     return track;
                 }
                 case 7:
                 {
                     _director.Make4Car(true);
-                    _director.Make1Plane(1,2);
+                    _director.Make1Plane();
                     _director.Make2Train();
                     Track track = new Track(_builder.Result, volume);
 
@@ -228,7 +194,6 @@ namespace Lab3
                             }
                         }
                     }
-
                     v[minindex] = 0;
                 }
             } while (minindex < 99999);

@@ -105,21 +105,29 @@ namespace Lab3.Transports
             }
         }
 
-        public void AddPlane(int x, int y, int i = 1)
+        public void AddPlane( int i = 1)
         {
             Plane plane1 = new Plane();
             foreach (var it in States.Table.Value)
             {
-                if (it.Key.Contains(States.Points.Value[_path[0]]))
+                if (States.Points.Value[_path[3]].Contains("AP"))
                 {
-                    plane1 = new Plane(States.TableCosts.Value[it.Value * 3], 
-                        States.MatrixDist.Value[_path[x]][_path[y]]);
+                    if (it.Key.Contains(States.Points.Value[_path[3]]))
+                    {
+                        plane1 = new Plane(States.TableCosts.Value[it.Value * 3], 
+                            States.MatrixDist.Value[_path[1]][_path[2]]);
+                    }
+                    else if (it.Key.Contains(States.Points.Value[_path[1]]))
+                    {
+                        plane1 = new Plane(States.TableCosts.Value[it.Value * 3], 
+                            States.MatrixDist.Value[_path[3]][_path[4]]);
+                    }
                 }
             }
             _result.Add(plane1);
         }
 
-        public void AddTrain(int x, int y, int i = 1)
+        public void AddTrain(int i = 1)
         {
             switch (i)
             {
@@ -128,10 +136,18 @@ namespace Lab3.Transports
                     Train train1 = new Train();
                     foreach (var it in States.Table.Value)
                     {
-                        if (it.Key.Contains(States.Points.Value[_path[0]]))
+                        if (States.Points.Value[_path[1]].Contains("TS"))
                         {
-                            train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], 
-                                States.MatrixDist.Value[_path[x]][_path[y]]);
+                            if (it.Key.Contains(States.Points.Value[_path[1]]))
+                            {
+                                train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], 
+                                    States.MatrixDist.Value[_path[1]][_path[2]]);
+                            }
+                            else if (it.Key.Contains(States.Points.Value[_path[3]]))
+                            {
+                                train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], 
+                                    States.MatrixDist.Value[_path[3]][_path[4]]);
+                            }
                         }
                     }
                     _result.Add(train1);
@@ -144,7 +160,7 @@ namespace Lab3.Transports
                     Train train2 = new Train();
                     foreach (var it in States.Table.Value)
                     {
-                        if (it.Key.Contains(States.Points.Value[_path[0]]))
+                        if (States.Points.Value[_path[1]].Contains("TS"))
                         {
                             train1 = new Train(States.TableCosts.Value[it.Value * 3 + 1], 
                                 States.MatrixDist.Value[_path[1]][_path[2]]);

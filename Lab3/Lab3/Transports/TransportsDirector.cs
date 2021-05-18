@@ -45,23 +45,23 @@ namespace Lab3.Transports
             _builder.AddCar(4);
         }
         
-        public void Make1Plane(int x, int y, bool reset = false)
+        public void Make1Plane(bool reset = false)
         {
             if (reset)
             {
                 _builder.Reset();
             }
 
-            _builder.AddPlane(x, y, 1);
+            _builder.AddPlane(1);
         }
         
-        public void Make1Train(int x, int y, bool reset = false)
+        public void Make1Train(bool reset = false)
         {
             if (reset)
             {
                 _builder.Reset();
             }
-            _builder.AddTrain(x, y, 1);
+            _builder.AddTrain(1);
         }
         
         public void Make2Train(bool reset = false)
@@ -70,7 +70,7 @@ namespace Lab3.Transports
             {
                 _builder.Reset();
             }
-            _builder.AddTrain(0,0,2);
+            _builder.AddTrain(2);
         }
     }
 }
